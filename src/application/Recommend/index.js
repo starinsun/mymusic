@@ -1,11 +1,14 @@
 /*
  * @Date: 2019-12-31 16:03:48
  * @LastEditors  : Asen Wang
- * @LastEditTime : 2020-01-01 23:23:39
+ * @LastEditTime : 2020-01-02 20:10:03
  * @content: I
  */
 import React, { memo } from 'react';
 import Slider from '../../components/slider';
+import RecommendList from '../../components/list';
+import Scroll from '../../components/scroll';
+import { Content } from './style';
 
 const Recommend = () => {
   const bannerList = [1, 2, 3, 4].map(item => {
@@ -15,7 +18,7 @@ const Recommend = () => {
     };
   });
 
-  const recommendList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(item => {
+  const recommendList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(item => {
     return {
       id: 1,
       picUrl:
@@ -25,10 +28,14 @@ const Recommend = () => {
     };
   });
   return (
-    <div>
-      <Slider bannerList={bannerList}></Slider>
-      {/* <RecommendList recommendList={recommendList}></RecommendList> */}
-    </div>
+    <Content>
+      <Scroll className="list">
+        <div>
+          <Slider bannerList={bannerList}></Slider>
+          <RecommendList recommendList={recommendList}></RecommendList>
+        </div>
+      </Scroll>
+    </Content>
   );
 };
 
