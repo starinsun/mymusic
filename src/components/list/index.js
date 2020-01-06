@@ -1,12 +1,13 @@
 /*
  * @Date: 2020-01-02 13:45:33
  * @LastEditors  : Asen Wang
- * @LastEditTime : 2020-01-02 19:02:04
+ * @LastEditTime : 2020-01-06 21:11:12
  * @content: I
  */
 import React, { memo } from 'react';
 import { ListWrapper, ListItem, List } from './style';
 import { getCount } from '../../api/utils';
+import Lazyload from 'react-lazyload';
 
 const RecommendList = props => {
   return (
@@ -18,12 +19,23 @@ const RecommendList = props => {
             <ListItem key={item.id + index}>
               <div className="img_wrapper">
                 <div className="decorate"></div>
-                <img
-                  src={item.picUrl + '?param=300×300'}
-                  width="100%"
-                  height="100%"
-                  alt="music"
-                />
+                <Lazyload
+                  placeholder={
+                    <img
+                      width="100%"
+                      height="100%"
+                      src={require('./music.png')}
+                      alt="music"
+                    />
+                  }
+                >
+                  <img
+                    src={item.picUrl + '?param=300×300'}
+                    width="100%"
+                    height="100%"
+                    alt="music"
+                  />
+                </Lazyload>
                 <div className="play_count">
                   <i className="iconfont play">&#xe885;</i>
                   <span className="count">{getCount(item.playCount)}</span>
