@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-01-06 21:14:55
- * @LastEditors: Asen Wang
- * @LastEditTime: 2020-01-06 21:21:44
+ * @LastEditors  : Asen Wang
+ * @LastEditTime : 2020-01-09 18:42:32
  * @content: I
  */
 import React, { memo } from 'react';
@@ -38,9 +38,10 @@ const LoadingWrapper = styled.div`
   }
 `;
 
-const Loading = () => {
+const Loading = props => {
+  const { show } = props;
   return (
-    <LoadingWrapper>
+    <LoadingWrapper style={show ? { display: '' } : { display: 'none' }}>
       <div></div>
       <div></div>
     </LoadingWrapper>

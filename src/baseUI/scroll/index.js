@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-01-02 19:25:25
  * @LastEditors  : Asen Wang
- * @LastEditTime : 2020-01-02 21:55:23
+ * @LastEditTime : 2020-01-09 18:33:17
  * @content: I
  */
 import React, {
@@ -9,11 +9,15 @@ import React, {
   useState,
   useRef,
   useEffect,
-  useImperativeHandle
+  useImperativeHandle,
+  useMemo
 } from 'react';
 import BScroll from 'better-scroll';
-import { ScrollContainer } from './style';
+import { ScrollContainer, PullDownLoading, PullUpLoading } from './style';
 import PropTypes from 'prop-types';
+import Loading from '../loading';
+import LoadingV2 from '../loading-v2';
+import { debounce } from '../../api/utils';
 
 const Scroll = forwardRef((props, ref) => {
   const [bScroll, setBScroll] = useState();
@@ -26,8 +30,16 @@ const Scroll = forwardRef((props, ref) => {
     pullDown,
     onScroll,
     bounceTop,
-    bounceBottom
+    bounceBottom,
+    pullDownLoading,
+    pullUpLoading
   } = props;
+  let pullUpDebounce = useMemo(() => {
+    return debounce(pullUp, 300);
+  }, [pullUp]);
+  let pullDownDebounce = useMemo(() => {
+    return debounce(pullDown, 300);
+  }, [pullDown]);
 
   useEffect(() => {
     const scroll = new BScroll(scrollContainerRef.current, {
@@ -62,26 +74,26 @@ const Scroll = forwardRef((props, ref) => {
     bScroll.on('scrollEnd', () => {
       // 判断是否滑动到了底部
       if (bScroll.y <= bScroll.maxScrollY + 100) {
-        pullUp();
+        pullUpDebounce();
       }
     });
     return () => {
       bScroll.off('scrollEnd');
     };
-  }, [pullUp, bScroll]);
+  }, [pullUpDebounce, pullUp, bScroll]);
 
   useEffect(() => {
     if (!bScroll || !pullDown) return;
     bScroll.on('touchEnd', pos => {
       // 判断用户的下拉动作
       if (pos.y > 50) {
-        pullDown();
+        pullDownDebounce();
       }
     });
     return () => {
       bScroll.off('touchEnd');
     };
-  }, [pullDown, bScroll]);
+  }, [pullDownDebounce, pullDown, bScroll]);
 
   useEffect(() => {
     if (refresh && bScroll) {
@@ -103,8 +115,23 @@ const Scroll = forwardRef((props, ref) => {
     }
   }));
 
+  const PullUpDisplayStyle = pullUpLoading
+    ? { display: '' }
+    : { display: 'none' };
+  const PullDownDisplayStyle = pullDownLoading
+    ? { display: '' }
+    : { display: 'none' };
+
   return (
-    <ScrollContainer ref={scrollContainerRef}>{props.children}</ScrollContainer>
+    <ScrollContainer ref={scrollContainerRef}>
+      {props.children}
+      <PullUpLoading style={PullUpDisplayStyle}>
+        <Loading></Loading>
+      </PullUpLoading>
+      <PullDownLoading style={PullDownDisplayStyle}>
+        <LoadingV2></LoadingV2>
+      </PullDownLoading>
+    </ScrollContainer>
   );
 });
 
