@@ -1,13 +1,13 @@
 /*
  * @Date: 2019-12-31 16:03:48
  * @LastEditors  : Asen Wang
- * @LastEditTime : 2020-01-06 21:48:44
+ * @LastEditTime : 2020-01-08 21:41:37
  * @content: I
  */
 import React, { memo, useEffect } from 'react';
 import Slider from '../../components/slider';
 import RecommendList from '../../components/list';
-import Scroll from '../../components/scroll';
+import Scroll from '../../baseUI/scroll';
 import { Content } from './style';
 import { getBannerList, getRecommendList } from './store/actionCreators';
 import { useSelector, useDispatch } from 'react-redux';
